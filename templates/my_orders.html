@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+
+<!-- Page Header -->
+<div class="text-center mb-5">
+    <div style="font-size:48px;">📦</div>
+
+    <h2 class="fw-bold text-success mt-2">
+        My Orders
+    </h2>
+
+    <p class="text-muted mb-0">
+        Manage your weekly meal orders
+    </p>
+</div>
+
+
+{% if weekly_orders %}
+
+    {% for week, week_orders in weekly_orders.items() %}
+
+    <!-- ================================================= -->
+    <!-- WEEK CARD -->
+    <!-- ================================================= -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+
+        <!-- Week Header -->
+        <div class="bg-success text-white p-4">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-8">
+
+                    <small class="text-white-50">
+                        WEEKLY ORDER
+                    </small>
+
+                    <h4 class="fw-bold mb-1 mt-1">
+                        📅 {{ week[0] }} — {{ week[1] }}
+                    </h4>
+
+                    <span class="small">
+                        {{ week_orders|length }}
+                        meal{% if week_orders|length != 1 %}s{% endif %}
+                        ordered
+                    </span>
+
+                </div>
+
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                    <small class="text-white-50">
+                        Active Total
+                    </small>
+
+                    <h3 class="fw-bold mb-0">
+
+                        ฿{{
+                            "%.2f"|format(
+                                week_orders
+                                |selectattr("status", "equalto", "Active")
+                                |map(attribute="price")
+                                |sum
+                            )
+                        }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Meals -->
+        <div class="card-body p-4">
+
+            <div class="row g-3">
+
+                {% for order in week_orders %}
+
+                <div class="col-lg-6">
+
+                    <div class="border rounded-4 p-4 h-100">
+
+                        <!-- Meal Top -->
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+
+                                <div class="text-success small fw-semibold mb-1">
+                                    {{ order.day }} • {{ order.date }}
+                                </div>
+
+                                <h5 class="fw-bold mb-1">
+                                    {{ order.meal }}
+                                </h5>
+
+                                <span class="text-muted small">
+                                    {{ order.category }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- Status -->
+
+                            {% if order.status == "Active" %}
+
+                                <span class="badge bg-success rounded-pill px-3 py-2">
+                                    Active
+                                </span>
+
+                            {% elif order.status == "Cancelled" %}
+
+                                <span class="badge bg-danger rounded-pill px-3 py-2">
+                                    Cancelled
+                                </span>
+
+                            {% elif order.status == "Prepared" %}
+
+                                <span class="badge bg-primary rounded-pill px-3 py-2">
+                                    Prepared
+                                </span>
+
+                            {% elif order.status == "Delivered" %}
+
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                    Delivered
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                    {{ order.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <hr class="my-3">
+
+
+                        <!-- Details -->
+
+                        <div class="row text-center">
+
+                            <div class="col-4 border-end">
+
+                                <small class="text-muted d-block">
+                                    Order
+                                </small>
+
+                                <strong>
+                                    #{{ order.id }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="col-4 border-end">
+
+                                <small class="text-muted d-block">
+                                    Calories
+                                </small>
+
+                                <strong>
+                                    {{ order.calories }}
+                                </strong>
+
+                                <small class="text-muted">
+                                    kcal
+                                </small>
+
+                            </div>
+
+
+                            <div class="col-4">
+
+                                <small class="text-muted d-block">
+                                    Price
+                                </small>
+
+                                <strong class="text-success">
+                                    ฿{{ "%.2f"|format(order.price) }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Cancel -->
+
+                        {% if order.can_cancel %}
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm w-100 rounded-3 mt-4"
+                            onclick="openCancelModal(
+                                '{{ order.id }}',
+                                '{{ order.meal }}'
+                            )"
+                        >
+                            🗑 Cancel Order
+                        </button>
+
+                        {% elif order.status == "Active" %}
+
+                        <div class="text-center text-muted small mt-4">
+                            🔒 Cancellation unavailable
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+
+    <!-- ================================================= -->
+    <!-- OVERALL SUMMARY -->
+    <!-- ================================================= -->
+
+    <div class="card border-0 shadow-sm rounded-4 mt-5">
+
+        <div class="card-body p-4">
+
+            <h5 class="fw-bold text-success mb-4">
+                📊 Order Summary
+            </h5>
+
+            <div class="row text-center">
+
+                <div class="col-md-4 mb-3 mb-md-0">
+
+                    <div class="border rounded-4 p-3">
+
+                        <small class="text-muted">
+                            Total Orders
+                        </small>
+
+                        <h4 class="fw-bold mb-0 mt-1">
+                            {{ orders|length }}
+                        </h4>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3 mb-md-0">
+
+                    <div class="border rounded-4 p-3">
+
+                        <small class="text-muted">
+                            Active Orders
+                        </small>
+
+                        <h4 class="fw-bold text-success mb-0 mt-1">
+
+                            {{
+                                orders
+                                |selectattr("status", "equalto", "Active")
+                                |list
+                                |length
+                            }}
+
+                        </h4>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="border rounded-4 p-3">
+
+                        <small class="text-muted">
+                            Active Spending
+                        </small>
+
+                        <h4 class="fw-bold text-success mb-0 mt-1">
+
+                            ฿{{ "%.2f"|format(total_price) }}
+
+                        </h4>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% else %}
+
+    <!-- ================================================= -->
+    <!-- EMPTY -->
+    <!-- ================================================= -->
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body text-center py-5">
+
+            <div style="font-size:70px;">
+                🍱
+            </div>
+
+            <h4 class="fw-bold mt-3">
+                No Orders Yet
+            </h4>
+
+            <p class="text-muted">
+                Start planning your meals for the week.
+            </p>
+
+            <a
+                href="{{ url_for('weekly_planner') }}"
+                class="btn btn-success px-4 rounded-3"
+            >
+                📅 Plan My Week
+            </a>
+
+        </div>
+
+    </div>
+
+{% endif %}
+```
+
+</div>
+
+<!-- ========================================================= -->
+
+<!-- CANCEL MODAL -->
+
+<!-- ========================================================= -->
+
+<div class="modal fade"
+     id="cancelModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+```
+<div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content border-0 shadow-lg rounded-4">
+
+        <div class="modal-body text-center p-5">
+
+            <div style="font-size:55px;">
+                ⚠️
+            </div>
+
+            <h4 class="fw-bold mt-3">
+                Cancel Order?
+            </h4>
+
+            <p class="text-muted">
+                Are you sure you want to cancel
+                <strong id="cancelMealName"></strong>?
+            </p>
+
+            <div class="d-flex justify-content-center gap-2 mt-4">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary px-4 rounded-3"
+                    data-bs-dismiss="modal"
+                >
+                    Keep Order
+                </button>
+
+                <a
+                    id="cancelOrderButton"
+                    href="#"
+                    class="btn btn-danger px-4 rounded-3"
+                >
+                    Yes, Cancel
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+
+function openCancelModal(orderId, mealName) {
+
+    document.getElementById(
+        "cancelMealName"
+    ).textContent = mealName;
+
+    document.getElementById(
+        "cancelOrderButton"
+    ).href = "/cancel-order/" + orderId;
+
+    const modal =
+        bootstrap.Modal.getOrCreateInstance(
+            document.getElementById("cancelModal")
+        );
+
+    modal.show();
+}
+
+</script>
+
+{% endblock %}

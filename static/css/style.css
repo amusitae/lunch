@@ -1,0 +1,570 @@
+/* =========================================================
+   LUNCHPILOT
+   GLOBAL STYLES
+========================================================= */
+
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8fafc;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar-brand {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #198754 !important;
+}
+
+
+/* =========================================================
+   HOME - HERO
+========================================================= */
+
+.lp-hero {
+    padding: 90px 0 100px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f0fdf4 0%,
+            #ffffff 55%,
+            #f8fafc 100%
+        );
+}
+
+
+/* Small label */
+
+.lp-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 15px;
+
+    margin-bottom: 22px;
+
+    border-radius: 50px;
+
+    background-color: #e8f7ef;
+    color: #198754;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* Main heading */
+
+.lp-hero-title {
+    max-width: 650px;
+
+    margin: 0;
+
+    font-size: 54px;
+    line-height: 1.12;
+
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+
+    color: #1f2937;
+}
+
+.lp-hero-title span {
+    display: block;
+    color: #198754;
+}
+
+
+/* Description */
+
+.lp-hero-text {
+    max-width: 580px;
+
+    margin-top: 25px;
+
+    color: #64748b;
+
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+
+/* Buttons */
+
+.lp-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 32px;
+}
+
+.lp-main-btn,
+.lp-second-btn {
+    padding: 12px 25px;
+
+    border-radius: 10px;
+
+    font-weight: 600;
+}
+
+.lp-main-btn {
+    box-shadow:
+        0 8px 20px rgba(25, 135, 84, 0.18);
+}
+
+
+/* Small points */
+
+.lp-hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+
+    margin-top: 25px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.lp-hero-points span {
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   HERO IMAGE
+========================================================= */
+
+.lp-hero-image-box {
+    position: relative;
+
+    max-width: 570px;
+
+    margin: 0 auto;
+}
+
+.lp-hero-image {
+    width: 100%;
+
+    display: block;
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.15);
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+.lp-hero-image:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 30px 70px rgba(15, 23, 42, 0.2);
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.lp-features {
+    padding: 90px 0;
+
+    background-color: #ffffff;
+}
+
+
+/* Section heading */
+
+.lp-section-heading {
+    max-width: 700px;
+
+    margin: 0 auto 55px;
+
+    text-align: center;
+}
+
+.lp-section-heading span {
+    color: #198754;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.lp-section-heading h2 {
+    margin-top: 10px;
+
+    color: #1f2937;
+
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.lp-section-heading p {
+    margin-top: 14px;
+
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+
+/* Feature card */
+
+.lp-feature-card {
+    height: 100%;
+
+    padding: 30px 24px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e9ecef;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.lp-feature-card:hover {
+    transform: translateY(-7px);
+
+    border-color: #d4edda;
+
+    box-shadow:
+        0 15px 35px rgba(15, 23, 42, 0.08);
+}
+
+
+/* Feature icon */
+
+.lp-feature-icon {
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background-color: #e8f7ef;
+
+    font-size: 30px;
+
+    transition: transform 0.3s ease;
+}
+
+.lp-feature-card:hover .lp-feature-icon {
+    transform: scale(1.08);
+}
+
+
+/* Feature title */
+
+.lp-feature-card h3 {
+    margin-bottom: 12px;
+
+    color: #1f2937;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+/* Feature description */
+
+.lp-feature-card p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+.lp-how {
+    padding: 90px 0;
+
+    background-color: #f8fafc;
+}
+
+
+/* Step */
+
+.lp-step {
+    height: 100%;
+
+    padding: 30px;
+
+    background-color: #ffffff;
+
+    border-radius: 18px;
+
+    border: 1px solid #edf0f2;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.lp-step:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 15px 35px rgba(15, 23, 42, 0.08);
+}
+
+
+/* Step number */
+
+.lp-step-number {
+    color: #198754;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+/* Step title */
+
+.lp-step h3 {
+    margin-top: 15px;
+
+    color: #1f2937;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* Step text */
+
+.lp-step p {
+    margin-top: 12px;
+    margin-bottom: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   FINAL CTA
+========================================================= */
+
+.lp-final {
+    padding: 0 0 90px;
+
+    background-color: #f8fafc;
+}
+
+.lp-final-box {
+    padding: 65px 30px;
+
+    text-align: center;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8f7ef,
+            #f8fffb
+        );
+
+    border: 1px solid #d9f0e2;
+}
+
+.lp-final-label {
+    color: #198754;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.lp-final-box h2 {
+    margin-top: 12px;
+
+    color: #1f2937;
+
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.lp-final-box p {
+    margin-top: 12px;
+
+    color: #64748b;
+
+    line-height: 1.7;
+}
+
+.lp-final-btn {
+    margin-top: 20px;
+
+    padding: 12px 28px;
+
+    border-radius: 10px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+
+/* Tablets */
+
+@media (max-width: 991px) {
+
+    .lp-hero {
+        padding: 70px 0 80px;
+    }
+
+    .lp-hero-title {
+        font-size: 45px;
+    }
+
+    .lp-hero-image-box {
+        margin-top: 25px;
+    }
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .lp-hero {
+        padding: 55px 0 70px;
+
+        text-align: center;
+    }
+
+    .lp-hero-title {
+        font-size: 38px;
+        letter-spacing: -0.8px;
+    }
+
+    .lp-hero-text {
+        margin-left: auto;
+        margin-right: auto;
+
+        font-size: 16px;
+    }
+
+    .lp-hero-actions {
+        justify-content: center;
+    }
+
+    .lp-hero-points {
+        justify-content: center;
+        gap: 10px 18px;
+    }
+
+    .lp-hero-image-box {
+        margin-top: 20px;
+    }
+
+    .lp-features,
+    .lp-how {
+        padding: 70px 0;
+    }
+
+    .lp-section-heading h2 {
+        font-size: 27px;
+    }
+
+    .lp-final-box h2 {
+        font-size: 27px;
+    }
+}
+
+
+/* Small phones */
+
+@media (max-width: 576px) {
+
+    .lp-hero-title {
+        font-size: 32px;
+    }
+
+    .lp-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .lp-main-btn,
+    .lp-second-btn {
+        width: 100%;
+    }
+
+    .lp-hero-points {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .lp-section-heading {
+        margin-bottom: 40px;
+    }
+
+    .lp-feature-card,
+    .lp-step {
+        padding: 25px 20px;
+    }
+
+    .lp-final-box {
+        padding: 50px 20px;
+    }
+}

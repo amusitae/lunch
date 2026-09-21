@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin - Orders
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">📦 All Orders</h2>
+
+            <p class="text-muted">
+                Manage customer orders and their status.
+            </p>
+        </div>
+
+        <a href="{{ url_for('admin.admin_plan') }}"
+           class="btn btn-secondary">
+            ← Back to Admin
+        </a>
+
+    </div>
+
+
+    <!-- Filters -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form method="GET"
+                  action="{{ url_for('admin.admin_orders') }}">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- Date -->
+                    <div class="col-md-4">
+
+                        <label class="form-label fw-bold">
+                            Filter by Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            class="form-control"
+                            value="{{ selected_date }}"
+                        >
+
+                    </div>
+
+
+                    <!-- Status -->
+                    <div class="col-md-4">
+
+                        <label class="form-label fw-bold">
+                            Filter by Status
+                        </label>
+
+                        <select
+                            name="status"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                All Statuses
+                            </option>
+
+                            <option value="Active"
+                                {% if selected_status == "Active" %}selected{% endif %}>
+                                Active
+                            </option>
+
+                            <option value="Prepared"
+                                {% if selected_status == "Prepared" %}selected{% endif %}>
+                                Prepared
+                            </option>
+
+                            <option value="Delivered"
+                                {% if selected_status == "Delivered" %}selected{% endif %}>
+                                Delivered
+                            </option>
+
+                            <option value="Cancelled"
+                                {% if selected_status == "Cancelled" %}selected{% endif %}>
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="col-md-4">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            🔍 Filter
+                        </button>
+
+                        <a
+                            href="{{ url_for('admin.admin_orders') }}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Reset
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Orders Table -->
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Meal</th>
+                            <th>Meal Date</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if orders %}
+
+                            {% for order in orders %}
+
+                            <tr>
+
+                                <!-- Order ID -->
+                                <td>
+                                    #{{ order[0] }}
+                                </td>
+
+
+                                <!-- Customer -->
+                                <td>
+                                    👤 {{ order[1] }}
+                                </td>
+
+
+                                <!-- Meal -->
+                                <td>
+                                    {{ order[2] }}
+                                </td>
+
+
+                                <!-- Meal Date -->
+                                <td>
+                                    {{ order[3] }}
+                                </td>
+
+
+                                <!-- Price -->
+                                <td>
+                                    {{ "%.2f"|format(order[4]) }}
+                                </td>
+
+
+                                <!-- Status -->
+                                <td>
+
+                                    {% if order[5] == "Active" %}
+
+                                        <span class="badge bg-primary">
+                                            Active
+                                        </span>
+
+                                    {% elif order[5] == "Prepared" %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            Prepared
+                                        </span>
+
+                                    {% elif order[5] == "Delivered" %}
+
+                                        <span class="badge bg-success">
+                                            Delivered
+                                        </span>
+
+                                    {% elif order[5] == "Cancelled" %}
+
+                                        <span class="badge bg-danger">
+                                            Cancelled
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ order[5] }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- Update Status -->
+                                <td>
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('admin.admin_update_order', order_id=order[0]) }}"
+                                    >
+
+                                        <select
+                                            name="status"
+                                            class="form-select form-select-sm mb-2"
+                                        >
+
+                                            <option value="Active"
+                                                {% if order[5] == "Active" %}selected{% endif %}>
+                                                Active
+                                            </option>
+
+                                            <option value="Prepared"
+                                                {% if order[5] == "Prepared" %}selected{% endif %}>
+                                                Prepared
+                                            </option>
+
+                                            <option value="Delivered"
+                                                {% if order[5] == "Delivered" %}selected{% endif %}>
+                                                Delivered
+                                            </option>
+
+                                            <option value="Cancelled"
+                                                {% if order[5] == "Cancelled" %}selected{% endif %}>
+                                                Cancelled
+                                            </option>
+
+                                        </select>
+
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-primary"
+                                        >
+                                            Update
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="text-center py-4 text-muted"
+                                >
+                                    No orders found.
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

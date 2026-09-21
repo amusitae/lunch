@@ -1,0 +1,430 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Preferences
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <div style="font-size:50px;">
+            ⚙️
+        </div>
+
+        <h2 class="fw-bold text-success mt-2">
+            My Preferences
+        </h2>
+
+        <p class="text-muted">
+            Personalize your LunchPilot experience
+        </p>
+
+    </div>
+
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <form method="POST">
+
+
+                        <!-- ================================================= -->
+                        <!-- Food Allergy -->
+                        <!-- ================================================= -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                🥜 Food Allergy
+                            </label>
+
+                            <p class="text-muted small">
+                                Select all allergies that apply to you.
+                            </p>
+
+
+                            {% set selected_allergies = allergy.split(",") %}
+
+
+                            <div class="border rounded-3 p-3">
+
+
+                                <!-- No Allergy -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergy"
+                                        value="None"
+                                        id="allergy_none"
+                                        {% if "None" in selected_allergies %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="allergy_none">
+
+                                        No Allergy
+
+                                    </label>
+
+                                </div>
+
+
+                                <!-- Fish -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergy"
+                                        value="Fish/Seafood"
+                                        id="allergy_fish"
+                                        {% if "Fish/Seafood" in selected_allergies %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="allergy_fish">
+
+                                        Fish / Seafood
+
+                                    </label>
+
+                                </div>
+
+
+                                <!-- Dairy -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergy"
+                                        value="Dairy"
+                                        id="allergy_dairy"
+                                        {% if "Dairy" in selected_allergies %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="allergy_dairy">
+
+                                        Dairy
+
+                                    </label>
+
+                                </div>
+
+
+                                <!-- Eggs -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergy"
+                                        value="Eggs"
+                                        id="allergy_eggs"
+                                        {% if "Eggs" in selected_allergies %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="allergy_eggs">
+
+                                        Eggs
+
+                                    </label>
+
+                                </div>
+
+
+                                <!-- Peanuts -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergy"
+                                        value="Peanuts"
+                                        id="allergy_peanuts"
+                                        {% if "Peanuts" in selected_allergies %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="allergy_peanuts">
+
+                                        Peanuts
+
+                                    </label>
+
+                                </div>
+
+
+                                <!-- Nuts -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergy"
+                                        value="Nuts"
+                                        id="allergy_nuts"
+                                        {% if "Nuts" in selected_allergies %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="allergy_nuts">
+
+                                        Nuts
+
+                                    </label>
+
+                                </div>
+
+
+                                <!-- Gluten -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergy"
+                                        value="Gluten"
+                                        id="allergy_gluten"
+                                        {% if "Gluten" in selected_allergies %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="allergy_gluten">
+
+                                        Gluten
+
+                                    </label>
+
+                                </div>
+
+
+                                <!-- Other -->
+
+                                <div class="form-check mb-2">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="has_other_allergy"
+                                        value="yes"
+                                        id="has_other_allergy"
+                                        {% if allergy_other %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="has_other_allergy">
+
+                                        Other
+
+                                    </label>
+
+                                </div>
+
+
+                                <input
+                                    type="text"
+                                    name="allergy_other"
+                                    class="form-control mt-2"
+                                    placeholder="Enter another allergy"
+                                    value="{{ allergy_other }}"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- Daily Calories -->
+                        <!-- ================================================= -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                🔥 Daily Calorie Goal
+                            </label>
+
+                            <div class="input-group">
+
+                                <input
+                                    type="number"
+                                    name="daily_calorie_goal"
+                                    class="form-control rounded-start-3"
+                                    value="{{ daily_calorie_goal }}"
+                                    min="1"
+                                    required
+                                >
+
+                                <span class="input-group-text">
+                                    kcal / day
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- Monthly Budget -->
+                        <!-- ================================================= -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                💰 Monthly Lunch Budget
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    ฿
+                                </span>
+
+                                <input
+                                    type="number"
+                                    name="monthly_budget"
+                                    class="form-control"
+                                    value="{{ monthly_budget }}"
+                                    min="0"
+                                    step="0.01"
+                                    required
+                                >
+
+                                <span class="input-group-text">
+                                    / month
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================================================= -->
+                        <!-- Food Preference -->
+                        <!-- ================================================= -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                🥗 Food Preference
+                            </label>
+
+                            <select
+                                name="food_preference"
+                                class="form-select rounded-3"
+                            >
+
+                                <option
+                                    value="No Preference"
+                                    {% if food_preference == "No Preference" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    No Preference
+                                </option>
+
+                                <option
+                                    value="Healthy"
+                                    {% if food_preference == "Healthy" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Healthy
+                                </option>
+
+                                <option
+                                    value="Vegetarian"
+                                    {% if food_preference == "Vegetarian" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Vegetarian
+                                </option>
+
+                                <option
+                                    value="Low Calorie"
+                                    {% if food_preference == "Low Calorie" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Low Calorie
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- Save -->
+
+                        <button
+                            type="submit"
+                            class="btn btn-success w-100 rounded-3 py-2"
+                        >
+
+                            💾 Save Preferences
+
+                        </button>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin - LunchPilot
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+
+        <h2 class="text-success fw-bold">
+            👨‍💼 Admin Panel
+        </h2>
+
+        <p class="text-muted">
+            Manage meals in LunchPilot
+        </p>
+
+    </div>
+
+
+    <!-- Add Meal Button -->
+
+    <div class="d-flex justify-content-end mb-4">
+
+        <a href="/admin/add-meal"
+           class="btn btn-success px-4 rounded-3">
+
+            ➕ Add New Meal
+
+        </a>
+
+        <a href="{{ url_for('admin.admin_orders') }}"
+           class="btn btn-primary">
+
+            📦 All Orders
+
+        </a>
+
+    </div>
+
+
+    <!-- Meals Table -->
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-body p-4">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-success">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Meal</th>
+
+                            <th>Category</th>
+
+                            <th>Calories</th>
+
+                            <th>Price</th>
+
+                            <th>Ingredients</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for meal in meals %}
+
+                        <tr>
+
+                            <!-- ID -->
+
+                            <td>
+                                {{ meal[0] }}
+                            </td>
+
+
+                            <!-- Meal Name -->
+
+                            <td>
+
+                                <span class="fw-bold">
+                                    {{ meal[1] }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- Category -->
+
+                            <td>
+                                {{ meal[2] }}
+                            </td>
+
+
+                            <!-- Calories -->
+
+                            <td>
+                                {{ meal[3] }} kcal
+                            </td>
+
+
+                            <!-- Price -->
+
+                            <td>
+
+                                <span class="fw-semibold">
+                                    ฿{{ "%.2f"|format(meal[4]) }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- Ingredients -->
+
+                            <td>
+
+                                <small class="text-muted">
+                                    {{ meal[5] }}
+                                </small>
+
+                            </td>
+
+
+                            <!-- Actions -->
+
+                            <td>
+
+                                <div class="d-flex gap-2">
+
+                                    <a
+                                        href="/admin/edit-meal/{{ meal[0] }}"
+                                        class="btn btn-outline-primary btn-sm rounded-3"
+                                    >
+                                        ✏️ Edit
+                                    </a>
+
+
+                                    <a
+                                        href="/admin/delete-meal/{{ meal[0] }}"
+                                        class="btn btn-outline-danger btn-sm rounded-3"
+                                        onclick="return confirm('Are you sure you want to delete this meal?');"
+                                    >
+                                        🗑 Delete
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

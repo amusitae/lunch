@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+Meals
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="text-center text-success fw-bold mb-5">
+        Our Meals
+    </h2>
+
+    <div class="row">
+
+        {% for meal in meals %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow h-100 border-0 rounded-4">
+
+                <img
+                    src="{{ url_for('static', filename='images/' + meal[6]) }}"
+                    class="card-img-top"
+                    alt="{{ meal[1] }}"
+                    style="height:250px; object-fit:cover; border-top-left-radius:16px; border-top-right-radius:16px;">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        {{ meal[1] }}
+                    </h5>
+
+                    <p>
+                        <strong>Category:</strong>
+                        {{ meal[2] }}
+                    </p>
+
+                    <p>
+                        <strong>Calories:</strong>
+                        {{ meal[3] }} kcal
+                    </p>
+
+                    <p>
+                        <strong>Price:</strong>
+                        ฿{{ meal[4] }}
+                    </p>
+
+                    <p>
+                        {{ meal[5] }}
+                    </p>
+
+                    <div class="d-grid gap-2">
+
+                        <!-- Direct Order -->
+                       <a href="/order/{{ meal[0] }}"
+                          class="btn btn-success order-btn"
+                          data-meal-name="{{ meal[1] }}">
+                          Order
+                         </a>
+
+                          <!-- Add to Weekly Planner -->
+                       <a href="/weekly-planner?meal_id={{ meal[0] }}"
+                          class="btn btn-outline-success">
+                          Add to Weekly Plan
+                         </a>
+
+                    </div>
+                        
+                        
+                    
+                    
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

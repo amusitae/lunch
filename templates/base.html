@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}LunchPilot{% endblock %}
+    </title>
+
+
+    <!-- Bootstrap -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+
+    <!-- Google Font -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- ========================================================= -->
+    <!-- Navigation Bar -->
+    <!-- ========================================================= -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+
+        <div class="container">
+
+
+            <!-- Logo -->
+
+            <a class="navbar-brand fw-bold"
+               href="/">
+
+                🍽 LunchPilot
+
+            </a>
+
+
+            <!-- Mobile Button -->
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- Navigation -->
+
+            <div class="collapse navbar-collapse"
+                 id="navbarNav">
+
+
+                <ul class="navbar-nav ms-auto">
+
+
+                    {% if session.get("is_admin") == 1 %}
+                    
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/meals">
+
+                            Meals
+
+                         </a>
+
+                      </li>
+                      
+
+                    <!-- ================================================= -->
+                    <!-- ADMIN NAVIGATION -->
+                    <!-- ================================================= -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="{{ url_for('admin.admin_plan') }}">
+
+                            👨‍💼 Admin Plan
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Admin Account -->
+
+                    <li class="nav-item dropdown">
+
+
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="adminDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+
+                            👤 {{ session.get("fullname") }}
+
+                        </a>
+
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+
+                            <!-- Logout -->
+
+                            <li>
+
+                                <a class="dropdown-item text-danger"
+                                   href="/logout">
+
+                                    🚪 Logout
+
+                                </a>
+
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+
+
+                    {% else %}
+
+
+                    <!-- ================================================= -->
+                    <!-- NORMAL USER NAVIGATION -->
+                    <!-- ================================================= -->
+
+
+                    <!-- Home -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/">
+
+                            Home
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Meals -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/meals">
+
+                            Meals
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Weekly Planner -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/weekly-planner">
+
+                            Weekly Planner
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Dashboard -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/dashboard">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+
+                    {% if session.get("user_id") %}
+
+
+                    <!-- User Account -->
+
+                    <li class="nav-item dropdown">
+
+
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="userDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+
+                            👤 {{ session.get("fullname") }}
+
+                        </a>
+
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+
+                            <!-- My Orders -->
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   href="/my-orders">
+
+                                    📦 My Orders
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- My Preferences -->
+
+                            <li>
+
+                                <a class="dropdown-item"
+                                   href="{{ url_for('user.my_preferences') }}">
+
+                                    ⚙️ My Preferences
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- Divider -->
+
+                            <li>
+
+                                <hr class="dropdown-divider">
+
+                            </li>
+
+
+                            <!-- Logout -->
+
+                            <li>
+
+                                <a class="dropdown-item text-danger"
+                                   href="/logout">
+
+                                    🚪 Logout
+
+                                </a>
+
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+
+
+                    {% else %}
+
+
+                    <!-- Login -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/login">
+
+                            Login
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Register -->
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/register">
+
+                            Register
+
+                        </a>
+
+                    </li>
+
+
+                    {% endif %}
+
+
+                    {% endif %}
+
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ========================================================= -->
+    <!-- Main Content -->
+    <!-- ========================================================= -->
+
+    <main>
+
+
+        <!-- Flash Messages -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="container mt-3">
+
+                    {% for category, message in messages %}
+
+                        <div class="alert alert-{{ category }} alert-dismissible fade show"
+                             role="alert">
+
+                            {{ message }}
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+
+                            </button>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- Page Content -->
+
+        {% block content %}
+
+        {% endblock %}
+
+
+    </main>
+
+
+    <!-- ========================================================= -->
+    <!-- Footer -->
+    <!-- ========================================================= -->
+
+    <footer class="text-center py-3">
+
+        <p class="mb-0">
+
+            © 2026 LunchPilot. All Rights Reserved.
+
+        </p>
+
+    </footer>
+
+
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    <!-- LunchPilot JavaScript -->
+
+    <script src="{{ url_for('static', filename='js/script.js') }}">
+    </script>
+
+
+</body>
+
+</html>

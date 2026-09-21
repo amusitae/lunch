@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Meal
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="text-success fw-bold">
+            ✏️ Edit Meal
+        </h2>
+
+        <p class="text-muted">
+            Update meal information
+        </p>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+        <div class="card-body p-4">
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <div class="row g-3">
+
+                    <!-- Meal Name -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Meal Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="meal_name"
+                            class="form-control"
+                            value="{{ meal[1] }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Category -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Category
+                        </label>
+
+                        <input
+                            type="text"
+                            name="category"
+                            class="form-control"
+                            value="{{ meal[2] }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Calories -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Calories
+                        </label>
+
+                        <input
+                            type="number"
+                            name="calories"
+                            class="form-control"
+                            value="{{ meal[3] }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Price -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Price (฿)
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="price"
+                            class="form-control"
+                            value="{{ meal[4] }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Ingredients -->
+
+                    <div class="col-12">
+
+                        <label class="form-label fw-semibold">
+                            Ingredients
+                        </label>
+
+                        <textarea
+                            name="ingredients"
+                            class="form-control"
+                            rows="4"
+                        >{{ meal[5] }}</textarea>
+
+                    </div>
+
+
+                    <!-- Current Image -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Current Image
+                        </label>
+
+                        <div>
+
+                            <img
+                                src="{{ url_for('static', filename='images/' + meal[6]) }}"
+                                alt="{{ meal[1] }}"
+                                class="img-fluid rounded-3"
+                                style="max-height: 180px;"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Upload New Image -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Change Image
+                        </label>
+
+                        <input
+                            type="file"
+                            name="image"
+                            class="form-control"
+                            accept="image/*"
+                        >
+
+                        <small class="text-muted">
+                            Select a new image from your computer.
+                            Leave empty to keep the current image.
+                        </small>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+
+                    <div class="col-12 mt-4">
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success px-4 rounded-3"
+                            >
+                                💾 Save Changes
+                            </button>
+
+                            <a
+                                href="{{ url_for('admin.admin_panel') }}"
+                                class="btn btn-secondary px-4 rounded-3"
+                            >
+                                ← Back
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

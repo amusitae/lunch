@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Plan - LunchPilot{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="text-success fw-bold">
+            👨‍💼 Admin Plan
+        </h2>
+
+        <p class="text-muted">
+            LunchPilot Management System
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <!-- Manage Meals -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <a href="{{ url_for('admin.add_meal') }}"
+               class="text-decoration-none">
+
+                <div class="card shadow-sm border-0 rounded-4 p-4 text-center h-100">
+
+                    <div class="fs-1">
+                        🍽️
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        Manage Meals
+                    </h5>
+
+                    <p class="text-muted">
+                        Edit or delete meals
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- All Orders -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <a href="{{ url_for('admin.admin_orders') }}"
+               class="text-decoration-none">
+
+                <div class="card shadow-sm border-0 rounded-4 p-4 text-center h-100">
+
+                    <div class="fs-1">
+                        📦
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        All Orders
+                    </h5>
+
+                    <p class="text-muted">
+                        View and manage orders
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- Manage Users -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <a href="{{ url_for('admin.admin_users') }}"
+               class="text-decoration-none">
+
+                <div class="card shadow-sm border-0 rounded-4 p-4 text-center h-100">
+
+                    <div class="fs-1">
+                        👥
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        Manage Users
+                    </h5>
+
+                    <p class="text-muted">
+                        View or delete users
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- Add Meal -->
+
+        <div class="col-md-6 col-lg-3">
+
+            <a href="{{ url_for('admin.add_meal') }}"
+               class="text-decoration-none">
+
+                <div class="card shadow-sm border-0 rounded-4 p-4 text-center h-100">
+
+                    <div class="fs-1">
+                        ➕
+                    </div>
+
+                    <h5 class="fw-bold mt-3">
+                        Add New Meal
+                    </h5>
+
+                    <p class="text-muted">
+                        Add meal and upload image
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

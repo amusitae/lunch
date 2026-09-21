@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="mb-5">
+        <p class="text-success fw-semibold mb-1">
+            LUNCHPILOT DASHBOARD
+        </p>
+
+        <h2 class="fw-bold mb-2">
+            Welcome, {{ session["fullname"] }} 👋
+        </h2>
+
+        <p class="text-muted mb-0">
+            Manage your meals, budget, and weekly food plan.
+        </p>
+    </div>
+
+
+    <!-- Statistics -->
+    <div class="row g-4 mb-5">
+
+        <!-- Weekly Orders -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-2">
+                        Weekly Orders
+                    </p>
+
+                    <h2 class="fw-bold mb-1">
+                        {{ order_count|default(0, true) }}
+                    </h2>
+
+                    <small class="text-muted">
+                        Active orders this week
+                    </small>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Total Calories -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-2">
+                        Total Calories
+                    </p>
+
+                    <h2 class="fw-bold mb-1">
+                        {{ total_calories|default(0, true)|float|round(0) }}
+                    </h2>
+
+                    <small class="text-muted">
+                        kcal from this week's meals
+                    </small>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Weekly Spending -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-2">
+                        Weekly Spending
+                    </p>
+
+                    <h2 class="fw-bold mb-1">
+                        ฿{{ "%.2f"|format(total_spent|default(0, true)|float) }}
+                    </h2>
+
+                    <small class="text-muted">
+                        Active spending this week
+                    </small>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Budget & Upcoming Meal -->
+    <div class="row g-4 mb-5">
+
+        <!-- Remaining Budget -->
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <div>
+                            <p class="text-muted mb-1">
+                                Remaining Budget
+                            </p>
+
+                            <h3 class="fw-bold mb-0">
+                                ฿{{ "%.2f"|format(remaining_budget|default(0, true)|float) }}
+                            </h3>
+                        </div>
+
+                        <div class="text-end">
+                            <small class="text-muted">
+                                Monthly Budget
+                            </small>
+
+                            <div class="fw-semibold">
+                                ฿{{ "%.2f"|format(monthly_budget|default(0, true)|float) }}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Budget Progress -->
+                    <div class="progress mb-2" style="height: 10px;">
+
+                        <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            data-budget-percentage="{{ budget_percentage|default(0, true)|float }}"
+                            aria-valuenow="{{ budget_percentage|default(0, true)|float }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100">
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        {{ "%.0f"|format(budget_percentage|default(0, true)|float) }}% of your monthly budget used
+                    </small>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Upcoming Meal -->
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-1">
+                        Upcoming Meal
+                    </p>
+
+                    {% if upcoming_meal %}
+
+                        <h4 class="fw-bold mb-3">
+                            {{ upcoming_meal[1] }}
+                        </h4>
+
+                        <div class="mb-2">
+                            📅
+                            <span class="text-muted">
+                                {{ upcoming_meal[0] }}
+                            </span>
+                        </div>
+
+                        <div class="mb-2">
+                            🔥
+                            <span class="text-muted">
+                                {{ upcoming_meal[2] }} kcal
+                            </span>
+                        </div>
+
+                        <div>
+                            💰
+                            <span class="text-muted">
+                                ฿{{ "%.2f"|format(upcoming_meal[3]|default(0, true)|float) }}
+                            </span>
+                        </div>
+
+                    {% else %}
+
+                        <div class="py-3">
+
+                            <h5 class="text-muted">
+                                No upcoming meal
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                You don't have any active upcoming orders.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI Recommendation -->
+    <div class="card border-0 shadow-sm mb-5">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+                    <p class="text-success fw-semibold mb-1">
+                        AI-POWERED
+                    </p>
+
+                    <h4 class="fw-bold mb-0">
+                        Smart Meal Recommendation 🤖
+                    </h4>
+                </div>
+
+            </div>
+
+
+            {% if recommendation %}
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-8">
+
+                        <h4 class="fw-bold">
+                            {{ recommendation[1] }}
+                        </h4>
+
+                        <p class="text-muted mb-3">
+                            {{ recommendation[2] }}
+                        </p>
+
+                        <div class="d-flex gap-4 flex-wrap">
+
+                            <span>
+                                🔥
+                                <strong>
+                                    {{ recommendation[3] }}
+                                </strong>
+                                kcal
+                            </span>
+
+                            <span>
+                                💰
+                                <strong>
+                                    ฿{{ "%.2f"|format(recommendation[4]|default(0, true)|float) }}
+                                </strong>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+                        <a
+                            href="{{ url_for('meals.meals_page') }}"
+                            class="btn btn-success px-4">
+                            View Meals
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    No recommendation available yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Quick Actions -->
+    <div class="mb-4">
+
+        <h4 class="fw-bold mb-4">
+            Quick Actions
+        </h4>
+
+        <div class="row g-4">
+
+            <!-- Meals -->
+            <div class="col-md-4">
+
+                <a
+                    href="{{ url_for('meals.meals_page') }}"
+                    class="text-decoration-none">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <h5 class="fw-bold">
+                                🍱 Browse Meals
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                Explore available meals and place an order.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- Weekly Planner -->
+            <div class="col-md-4">
+
+                <a
+                    href="{{ url_for('weekly_planner.weekly_planner_page') }}"
+                    class="text-decoration-none">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <h5 class="fw-bold">
+                                📅 Weekly Planner
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                Plan your meals for the entire work week.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- My Orders -->
+            <div class="col-md-4">
+
+                <a
+                    href="{{ url_for('orders.my_orders') }}"
+                    class="text-decoration-none">
+
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body p-4">
+
+                            <h5 class="fw-bold">
+                                🛒 My Orders
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                View and manage your meal orders.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

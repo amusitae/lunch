@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Meal - LunchPilot{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="text-center mb-4">
+
+                <h2 class="text-success fw-bold">
+                    ➕ Add New Meal
+                </h2>
+
+                <p class="text-muted">
+                    Add a new meal to LunchPilot
+                </p>
+
+            </div>
+
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body p-4">
+
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
+
+
+                        <!-- Meal Name -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Meal Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="meal_name"
+                                class="form-control"
+                                placeholder="e.g. Chicken Rice"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Category -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Category
+                            </label>
+
+                            <input
+                                type="text"
+                                name="category"
+                                class="form-control"
+                                placeholder="e.g. Healthy"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Calories -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Calories
+                            </label>
+
+                            <input
+                                type="number"
+                                name="calories"
+                                class="form-control"
+                                min="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Price -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Price (฿)
+                            </label>
+
+                            <input
+                                type="number"
+                                name="price"
+                                class="form-control"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Ingredients -->
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Ingredients
+                            </label>
+
+                            <textarea
+                                name="ingredients"
+                                class="form-control"
+                                rows="3"
+                                placeholder="Chicken, Rice, Vegetables"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- Image -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Meal Image
+                            </label>
+
+                            <input
+                                type="file"
+                                name="image"
+                                class="form-control"
+                                accept="image/*"
+                            >
+
+                            <small class="text-muted">
+                                Select an image from your computer.
+                            </small>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success flex-fill"
+                            >
+                                ➕ Add Meal
+                            </button>
+
+                            <a
+                                href="{{ url_for('admin.admin_plan') }}"
+                                class="btn btn-outline-secondary"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
