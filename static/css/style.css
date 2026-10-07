@@ -21,18 +21,92 @@ body {
    NAVBAR
 ========================================================= */
 
+
+/* =========================================================
+   MODERN NAVBAR
+========================================================= */
+
+.navbar {
+
+    background: linear-gradient(
+        90deg,
+        #2b8a5d,
+        #157347
+    ) !important;
+
+    border-radius: 25px;
+
+    margin: 15px;
+
+    padding: 12px 25px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.15);
+}
+
+
+/* Menu item */
+
+.navbar .nav-link {
+
+    color: white !important;
+
+    font-weight: 600;
+
+    padding: 12px 20px;
+
+    border-radius: 18px;
+
+    transition: all 0.3s ease;
+}
+
+
+/* Hover */
+
+.navbar .nav-link:hover {
+
+    background: rgba(255,255,255,0.15);
+
+    color: white !important;
+}
+
+
+/* Active page */
+
+.navbar .nav-link.active {
+
+    background: #8bc34a;
+
+    color: white !important;
+
+    padding: 12px 28px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+/* Logo */
+
 .navbar-brand {
-    font-size: 1.6rem;
+
+    color: white !important;
+
+    font-size: 1.8rem;
+
     font-weight: 700;
 }
 
-.nav-link {
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
 
-.nav-link:hover {
-    color: #198754 !important;
+/* Profile area */
+
+.navbar .dropdown-toggle {
+
+    color: white !important;
+
+    font-weight: 600;
 }
 
 

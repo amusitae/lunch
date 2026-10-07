@@ -167,6 +167,21 @@ def create_database():
             except ValueError:
                 pass
 
+    # =====================================
+    # AI CHAT HISTORY
+    # =====================================
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS ai_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            question TEXT NOT NULL,
+            answer TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    """)
+
     connection.commit()
     connection.close()
 

@@ -21,47 +21,57 @@ Meals
             <div class="card shadow h-100 border-0 rounded-4">
 
                 <img
-                    src="{{ url_for('static', filename='images/' + meal[6]) }}"
+                    src="{{ url_for('static', filename='images/' + meal.image) }}"
                     class="card-img-top"
-                    alt="{{ meal[1] }}"
+                    alt="{{ meal.meal_name }}"
                     style="height:250px; object-fit:cover; border-top-left-radius:16px; border-top-right-radius:16px;">
 
                 <div class="card-body">
 
                     <h5 class="card-title">
-                        {{ meal[1] }}
+                        {{ meal.meal_name }}
                     </h5>
 
                     <p>
                         <strong>Category:</strong>
-                        {{ meal[2] }}
+                        {{ meal.category }}
                     </p>
 
                     <p>
                         <strong>Calories:</strong>
-                        {{ meal[3] }} kcal
+                        {{ meal.calories }} kcal
                     </p>
 
                     <p>
                         <strong>Price:</strong>
-                        ฿{{ meal[4] }}
+                        ฿{{ meal.price }}
                     </p>
 
                     <p>
-                        {{ meal[5] }}
+                        {{ meal.ingredients }}
                     </p>
+
+                    {% if not meal.safe %}
+                         <div class="badge bg-danger fs-6 mb-2">
+                            ⚠ Allergy Warning
+                        </div>
+
+                    <p class="text-danger fw-bold">
+                         Contains ingredients related to your allergy
+                    </p>
+                    {% endif %}
 
                     <div class="d-grid gap-2">
 
                         <!-- Direct Order -->
-                       <a href="/order/{{ meal[0] }}"
+                       <a href="/order/{{ meal.id }}"
                           class="btn btn-success order-btn"
-                          data-meal-name="{{ meal[1] }}">
+                          data-meal-name="{{ meal.meal_name }}">
                           Order
                          </a>
 
                           <!-- Add to Weekly Planner -->
-                       <a href="/weekly-planner?meal_id={{ meal[0] }}"
+                       <a href="/weekly-planner?meal_id={{ meal.id }}"
                           class="btn btn-outline-success">
                           Add to Weekly Plan
                          </a>

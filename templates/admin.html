@@ -24,23 +24,24 @@ Admin - LunchPilot
 
     <!-- Add Meal Button -->
 
-    <div class="d-flex justify-content-end mb-4">
+    <div class="d-flex justify-content-end gap-2 mb-4">
 
-        <a href="/admin/add-meal"
-           class="btn btn-success px-4 rounded-3">
+    <a href="/admin/add-meal"
+       class="btn btn-success px-4 rounded-3">
 
-            ➕ Add New Meal
+        ➕ Add New Meal
 
-        </a>
+    </a>
 
-        <a href="{{ url_for('admin.admin_orders') }}"
-           class="btn btn-primary">
 
-            📦 All Orders
+    <a href="{{ url_for('admin.admin_orders') }}"
+       class="btn btn-primary px-4 rounded-3">
 
-        </a>
+        📦 All Orders
 
-    </div>
+    </a>
+
+</div>
 
 
     <!-- Meals Table -->

@@ -29,14 +29,25 @@ def meals_page():
 
     allergy = get_user_allergy()
 
-    meals_list = [
-        meal
-        for meal in all_meals
-        if is_meal_safe(
+    meals_list = []
+
+    for meal in all_meals:
+
+        safe = is_meal_safe(
             meal[5],
             allergy
         )
-    ]
+
+        meals_list.append({
+            "id": meal[0],
+            "meal_name": meal[1],
+            "category": meal[2],
+            "calories": meal[3],
+            "price": meal[4],
+            "ingredients": meal[5],
+            "image": meal[6],
+            "safe": safe
+        })
 
     connection.close()
 
@@ -45,7 +56,6 @@ def meals_page():
         meals=meals_list,
         allergy=allergy
     )
-
 
 # =========================================================
 # Direct Order
@@ -93,8 +103,72 @@ def order(meal_id):
 
         connection.close()
 
+        return render_template(
+            "allergy_warning.html",
+            meal_id=meal_id,
+            meal_name=meal[2],
+            allergy=allergy
+        )
+
+    cursor.execute("""
+        INSERT INTO orders
+        (
+            user_id,
+            meal_id,
+            order_date,
+            total_price,
+            status,
+            meal_date
+        )
+        VALUES (
+            ?,
+            ?,
+            DATE('now'),
+            ?,
+            'Active',
+            DATE('now')
+        )
+    """, (
+        session["user_id"],
+        meal_id,
+        meal[0]
+    ))
+
+    connection.commit()
+    connection.close()
+
+    flash(
+        "Order placed successfully!",
+        "success"
+    )
+
+    return redirect(
+        url_for("meals.meals_page")
+    )
+
+@meals.route("/confirm-order/<int:meal_id>")
+def confirm_order(meal_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT price
+        FROM meals
+        WHERE id = ?
+    """, (meal_id,))
+
+    meal = cursor.fetchone()
+
+    if not meal:
+
+        connection.close()
+
         flash(
-            f"This meal is not suitable for your {allergy} allergy.",
+            "Meal not found!",
             "danger"
         )
 
@@ -135,5 +209,5 @@ def order(meal_id):
     )
 
     return redirect(
-        url_for("meals.meals_page")
+        url_for("orders.my_orders")
     )

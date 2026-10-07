@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from datetime import date, timedelta
+from routes.ai_assistant import ai_assistant
 
 from database import get_connection, create_database
 
@@ -24,6 +25,7 @@ app.register_blueprint(meals)
 app.register_blueprint(weekly_planner)
 app.register_blueprint(orders)
 app.register_blueprint(admin)
+app.register_blueprint(ai_assistant)
 
 
 # =========================================================

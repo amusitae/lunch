@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+Allergy Warning
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="card shadow border-warning">
+
+        <div class="card-body text-center p-5">
+
+            <h1 class="text-warning mb-4">
+                ⚠ Allergy Warning
+            </h1>
+
+            <h4 class="mb-3">
+                {{ meal_name }}
+            </h4>
+
+            <p class="lead">
+                This meal may contain ingredients
+                related to your allergy:
+            </p>
+
+            <h5 class="text-danger mb-4">
+                {{ allergy }}
+            </h5>
+
+            <p class="text-muted">
+                Are you sure you want to continue?
+            </p>
+
+            <div class="mt-4">
+
+                <a
+                    href="{{ url_for('meals.confirm_order', meal_id=meal_id) }}"
+                    class="btn btn-danger btn-lg">
+                    Yes, Continue Order
+                </a>
+
+                <a
+                    href="{{ url_for('meals.meals_page') }}"
+                    class="btn btn-secondary btn-lg">
+                    Cancel
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

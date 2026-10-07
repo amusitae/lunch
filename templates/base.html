@@ -37,6 +37,12 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 
+    
+          <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 
 
@@ -47,7 +53,7 @@
     <!-- Navigation Bar -->
     <!-- ========================================================= -->
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <nav class="navbar navbar-expand-lg lunchpilot-navbar">
 
         <div class="container">
 
@@ -168,11 +174,12 @@
                     <li class="nav-item">
 
                         <a class="nav-link"
-                           href="/">
+                            href="/">
 
-                            Home
+                            <i class="bi bi-house-door"></i>
+                                Home
 
-                        </a>
+                            </a>
 
                     </li>
 
@@ -182,11 +189,12 @@
                     <li class="nav-item">
 
                         <a class="nav-link"
-                           href="/meals">
+                            href="/meals">
 
-                            Meals
+                            <i class="bi bi-egg-fried"></i>
+                                Meals
 
-                        </a>
+                            </a>
 
                     </li>
 
@@ -196,27 +204,43 @@
                     <li class="nav-item">
 
                         <a class="nav-link"
-                           href="/weekly-planner">
+                            href="/weekly-planner">
 
-                            Weekly Planner
+                            <i class="bi bi-calendar-week"></i>
+                                Weekly Planner
 
-                        </a>
-
-                    </li>
-
-
-                    <!-- Dashboard -->
-
-                    <li class="nav-item">
-
-                        <a class="nav-link"
-                           href="/dashboard">
-
-                            Dashboard
-
-                        </a>
+                            </a>
 
                     </li>
+
+
+                                                <!-- Dashboard -->
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link"
+                                        href="/dashboard">
+
+                                        <i class="bi bi-bar-chart"></i>
+                                            Dashboard
+
+                                        </a>
+
+                                </li>
+
+                                <!-- AI Assistant -->
+
+                                <li class="nav-item">
+
+                                    <a class="nav-link"
+                                        href="/ai-assistant">
+
+                                        <i class="bi bi-robot"></i>
+                                            AI Assistant
+
+                                        </a>
+
+                                </li>
 
 
                     {% if session.get("user_id") %}

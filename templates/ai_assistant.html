@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+AI Assistant
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="text-success mb-4">
+        🤖 LunchPilot AI Assistant
+    </h2>
+
+    <form action="/ai-assistant" method="POST">
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Ask AI
+            </label>
+
+            <textarea
+                name="question"
+                class="form-control"
+                rows="4"
+                placeholder="Example: I like burgers but don't want burgers today">
+            </textarea>
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-success">
+
+            Ask AI
+
+        </button>
+
+    </form>
+
+    {% if answer %}
+
+    <div class="card mt-4">
+
+        <div class="card-header bg-success text-white">
+
+            AI Response
+
+        </div>
+
+        <div class="card-body">
+    <div style="
+        white-space: pre-wrap;
+        font-family: Arial, sans-serif;
+        line-height: 1.8;
+    ">
+        {{ answer|safe }}
+    </div>
+</div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
