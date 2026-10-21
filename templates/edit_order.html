@@ -1,0 +1,155 @@
+ {% extends "base.html" %}
+
+{% block title %}Edit Order{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-4">
+        <div style="font-size:48px;">✏️</div>
+        <h2 class="text-success fw-bold mt-2">Edit Order</h2>
+        <p class="text-muted">
+            Update your meal and meal date
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mx-auto"
+         style="max-width:650px;">
+
+        <div class="card-body p-4 p-md-5">
+
+            <form method="POST"
+                  action="{{ url_for('orders.edit_order', order_id=order[0]) }}"
+                  id="editOrderForm">
+                  <input type="hidden" name="confirm_allergy" id="confirmAllergy" value="">
+
+                <!-- Select Meal -->
+                <div class="mb-4">
+                    <label for="meal_id"
+                           class="form-label fw-bold">
+                        Select Meal
+                    </label>
+
+                    <select class="form-select"
+                            id="meal_id"
+                            name="meal_id"
+                            required>
+
+                        {% for meal in meals %}
+                        <option
+                            value="{{ meal.id }}"
+                            data-allergy-warning="{{ 'true' if meal.has_allergy_warning else 'false' }}"
+                            {% if meal.id == order[1] %}selected{% endif %}>
+
+                            {{ meal.name }} — {{ meal.calories }} kcal — ฿{{ "%.2f"|format(meal.price) }}
+
+                        </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <!-- Select Date -->
+                <div class="mb-4">
+                    <label for="meal_date"
+                           class="form-label fw-bold">
+                        Meal Date
+                    </label>
+
+                    <input type="date"
+                           class="form-control"
+                           id="meal_date"
+                           name="meal_date"
+                           value="{{ order[2] }}"
+                           min="{{ min_date }}"
+                           required>
+
+                    <small class="text-muted">
+                        Select a future weekday (Monday–Friday).
+                    </small>
+                </div>
+
+                <!-- Allergy Warning -->
+                <div class="alert alert-warning"
+                     id="allergyWarning"
+                     {% if not selected_meal_has_allergy_warning %}hidden{% endif %}>
+
+                    <strong>⚠️ Allergy Warning!</strong>
+                    <p class="mb-0">
+                        This meal may contain ingredients related
+                        to your allergy: {{ allergy }}
+                    </p>
+                    <small>
+                        Please confirm before saving this change.
+                    </small>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+
+                    <a href="{{ url_for('orders.my_orders') }}"
+                       class="btn btn-outline-secondary rounded-3 w-50">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success rounded-3 w-50">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+const mealSelect = document.getElementById("meal_id");
+const allergyWarning = document.getElementById("allergyWarning");
+const editOrderForm = document.getElementById("editOrderForm");
+const confirmAllergy = document.getElementById("confirmAllergy");
+
+function updateAllergyWarning() {
+    const selectedOption =
+        mealSelect.options[mealSelect.selectedIndex];
+
+    const hasWarning =
+        selectedOption.dataset.allergyWarning === "true";
+
+    allergyWarning.hidden = !hasWarning;
+
+    // Reset confirmation when the selected meal changes
+    confirmAllergy.value = "";
+}
+
+mealSelect.addEventListener("change", updateAllergyWarning);
+
+editOrderForm.addEventListener("submit", function(event) {
+    const selectedOption =
+        mealSelect.options[mealSelect.selectedIndex];
+
+    if (selectedOption.dataset.allergyWarning === "true") {
+        const confirmed = confirm(
+            "Allergy Warning: This meal may contain ingredients related to your allergy. Do you want to continue?"
+        );
+
+        if (!confirmed) {
+            event.preventDefault();
+            confirmAllergy.value = "";
+            return;
+        }
+
+        confirmAllergy.value = "yes";
+    } else {
+        confirmAllergy.value = "";
+    }
+});
+
+updateAllergyWarning();
+</script>
+
+{% endblock %}

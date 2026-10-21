@@ -1,0 +1,79 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Meal Plan{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="card border-0 shadow-sm rounded-4 mx-auto"
+         style="max-width: 600px;">
+
+        <div class="card-body p-4">
+
+            <h2 class="text-success fw-bold mb-2">
+                ✏️ Edit Meal Plan
+            </h2>
+
+            <p class="text-muted">
+                Change your meal while keeping the original date.
+            </p>
+
+            <div class="alert alert-light border rounded-3">
+                <strong>Meal date:</strong>
+                {{ plan[2] }}
+
+                <br>
+
+                <strong>Status:</strong>
+                {{ plan[3] }}
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for(
+                      'weekly_planner.edit_plan',
+                      plan_id=plan[0]
+                  ) }}">
+
+                <label for="meal_id" class="form-label fw-bold">
+                    Choose a meal
+                </label>
+
+                <select name="meal_id"
+                        id="meal_id"
+                        class="form-select mb-4"
+                        required>
+
+                    {% for meal in meals %}
+                    <option value="{{ meal[0] }}"
+                        {% if meal[0] == plan[1] %}selected{% endif %}>
+                        {{ meal[1] }} — {{ meal[3] }} kcal — ฿{{ "%.2f"|format(meal[4]) }}
+                    </option>
+                    {% endfor %}
+
+                </select>
+
+                <div class="d-flex gap-2">
+
+                    <a href="{{ url_for(
+                        'weekly_planner.weekly_planner_page',
+                        week_start=week_start
+                    ) }}"
+                       class="btn btn-outline-secondary rounded-3 w-50">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success rounded-3 w-50">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -105,6 +105,14 @@
                                     {{ order.meal }}
                                 </h5>
 
+{% if order.has_allergy_warning %}
+    <div class="alert alert-danger py-2 mt-2 mb-2">
+        <strong>⚠️ Allergy Warning!</strong>
+        This meal may contain ingredients related to your allergy:
+        {{ order.allergy }}
+    </div>
+{% endif %}
+
                                 <span class="text-muted small">
                                     {{ order.category }}
                                 </span>
@@ -201,28 +209,39 @@
                         </div>
 
 
-                        <!-- Cancel -->
+                        
+                        <!-- Edit and Cancel Buttons -->
 
-                        {% if order.can_cancel %}
+                        {% if order.can_edit %}
 
-                        <button
-                            type="button"
-                            class="btn btn-outline-danger btn-sm w-100 rounded-3 mt-4"
-                            onclick="openCancelModal(
-                                '{{ order.id }}',
-                                '{{ order.meal }}'
-                            )"
-                        >
-                            🗑 Cancel Order
-                        </button>
+                            <a
+                                href="{{ url_for('orders.edit_order', order_id=order.id) }}"
+                                class="btn btn-outline-success btn-sm w-100 rounded-3 mt-3"
+                            >
+                                ✏️ Edit Order
+                            </a>
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-danger btn-sm w-100 rounded-3 mt-2"
+                                onclick="openCancelModal(
+                                    '{{ order.id }}',
+                                    '{{ order.meal }}'
+                                )"
+                            >
+                                🗑 Cancel Order
+                            </button>
 
                         {% elif order.status == "Active" %}
 
-                        <div class="text-center text-muted small mt-4">
-                            🔒 Cancellation unavailable
-                        </div>
+                            <div class="text-center text-muted small mt-3">
+                                🔒 Editing and cancellation unavailable
+                                <br>
+                                <small>Meal date has passed or is today.</small>
+                            </div>
 
                         {% endif %}
+
 
                     </div>
 

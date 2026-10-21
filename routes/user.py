@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 from database import get_connection
 from routes.helpers import is_meal_safe
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 user = Blueprint("user", __name__)
@@ -187,6 +188,172 @@ def my_preferences():
             if user_data and user_data[3]
             else "No Preference"
         )
+    )
+
+
+
+# =========================================================
+# Manage Profile
+# =========================================================
+
+@user.route("/manage-profile", methods=["GET", "POST"])
+def manage_profile():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    if request.method == "POST":
+
+        action = request.form.get("action", "profile")
+
+        # =================================================
+        # Change Password
+        # =================================================
+
+        if action == "password":
+
+            current_password = request.form.get(
+                "current_password", ""
+            )
+
+            new_password = request.form.get(
+                "new_password", ""
+            )
+
+            confirm_new_password = request.form.get(
+                "confirm_new_password", ""
+            )
+
+            cursor.execute("""
+                SELECT password
+                FROM users
+                WHERE id = ?
+            """, (session["user_id"],))
+
+            result = cursor.fetchone()
+
+            if result is None:
+                connection.close()
+                session.clear()
+                return redirect(url_for("auth.login"))
+
+            stored_password = result[0]
+
+            # Verify current password
+            if str(stored_password).startswith(
+                ("scrypt:", "pbkdf2:")
+            ):
+                try:
+                    password_valid = check_password_hash(
+                        stored_password, current_password
+                    )
+                except (ValueError, TypeError):
+                    password_valid = False
+            else:
+                password_valid = (
+                    stored_password == current_password
+                )
+
+            if not password_valid:
+                connection.close()
+                flash("Current password is incorrect.", "danger")
+                return redirect(url_for("user.manage_profile"))
+
+            if not new_password or not confirm_new_password:
+                connection.close()
+                flash("Please fill in all password fields.", "danger")
+                return redirect(url_for("user.manage_profile"))
+
+            if len(new_password) < 8:
+                connection.close()
+                flash("New password must be at least 8 characters.", "danger")
+                return redirect(url_for("user.manage_profile"))
+
+            if new_password != confirm_new_password:
+                connection.close()
+                flash("New passwords do not match.", "danger")
+                return redirect(url_for("user.manage_profile"))
+
+            if new_password == current_password:
+                connection.close()
+                flash("New password must be different from your current password.", "danger")
+                return redirect(url_for("user.manage_profile"))
+
+            hashed_password = generate_password_hash(new_password)
+
+            cursor.execute("""
+                UPDATE users
+                SET password = ?
+                WHERE id = ?
+            """, (hashed_password, session["user_id"]))
+
+            connection.commit()
+            connection.close()
+
+            flash("Password changed successfully!", "success")
+            return redirect(url_for("user.manage_profile"))
+
+        # =================================================
+        # Update Profile
+        # =================================================
+
+        fullname = request.form.get("fullname", "").strip()
+        email = request.form.get("email", "").strip()
+
+        if not fullname or not email:
+            connection.close()
+            flash("Full name and email are required.", "danger")
+            return redirect(url_for("user.manage_profile"))
+
+        cursor.execute("""
+            SELECT id
+            FROM users
+            WHERE email = ?
+            AND id != ?
+        """, (email, session["user_id"]))
+
+        if cursor.fetchone():
+            connection.close()
+            flash("This email is already in use.", "danger")
+            return redirect(url_for("user.manage_profile"))
+
+        cursor.execute("""
+            UPDATE users
+            SET fullname = ?, email = ?
+            WHERE id = ?
+        """, (fullname, email, session["user_id"]))
+
+        connection.commit()
+        session["fullname"] = fullname
+        connection.close()
+
+        flash("Your profile has been updated successfully!", "success")
+        return redirect(url_for("user.manage_profile"))
+
+    # =====================================================
+    # Load Current Profile
+    # =====================================================
+
+    cursor.execute("""
+        SELECT fullname, email
+        FROM users
+        WHERE id = ?
+    """, (session["user_id"],))
+
+    profile = cursor.fetchone()
+    connection.close()
+
+    if profile is None:
+        session.clear()
+        return redirect(url_for("auth.login"))
+
+    return render_template(
+        "manage_profile.html",
+        fullname=profile[0],
+        email=profile[1]
     )
 
 

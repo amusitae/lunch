@@ -313,25 +313,24 @@ def weekly_planner_page():
         # Make sure date is Monday-Friday
         # -----------------------------------
 
-        if (
-            selected_plan_date < week_start
-            or
-            selected_plan_date > week_end
-        ):
-
-            flash(
-                "Please select a date within the current week.",
-                "danger"
-            )
-
+        
+        if selected_plan_date < week_start or selected_plan_date > week_end:
+            flash("Please select a date within the current week.", "danger")
             connection.close()
+            return redirect(url_for(
+                "weekly_planner.weekly_planner_page",
+                week_start=selected_week_start
+            ))
 
-            return redirect(
-                url_for(
-                    "weekly_planner.weekly_planner_page",
-                    week_start=selected_week_start
-                )
-            )
+        # Prevent adding meals for past dates
+        if selected_plan_date < date.today():
+            flash("You cannot add meals for a past date.", "warning")
+            connection.close()
+            return redirect(url_for(
+                "weekly_planner.weekly_planner_page",
+                week_start=selected_week_start
+            ))
+
 
         # -----------------------------------
         # Maximum 2 meals per day
@@ -438,6 +437,163 @@ def weekly_planner_page():
         has_ordered=has_ordered
     )
 
+# ==========================================
+# EDIT PLAN
+# ==========================================
+
+@weekly_planner.route(
+    "/edit-plan/<int:plan_id>",
+    methods=["GET", "POST"]
+)
+def edit_plan(plan_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    user_id = session["user_id"]
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    # Get the selected plan owned by this user
+    cursor.execute("""
+        SELECT id, meal_id, plan_date, status
+        FROM weekly_plans
+        WHERE id = ?
+        AND user_id = ?
+    """, (plan_id, user_id))
+
+    plan = cursor.fetchone()
+
+    if not plan:
+        connection.close()
+        flash("Meal plan not found.", "warning")
+        return redirect(url_for(
+            "weekly_planner.weekly_planner_page"
+        ))
+
+    plan_date = date.fromisoformat(plan[2])
+    status = plan[3]
+
+    # Only Planned and Confirmed plans can be edited
+    if status not in ("Planned", "Confirmed"):
+        connection.close()
+        flash("This meal plan can no longer be edited.", "warning")
+        return redirect(url_for(
+            "weekly_planner.weekly_planner_page",
+            week_start=(
+                plan_date - timedelta(days=plan_date.weekday())
+            ).isoformat()
+        ))
+
+    if plan_date < date.today():
+        connection.close()
+        flash("Past meal plans cannot be edited.", "warning")
+        return redirect(url_for(
+            "weekly_planner.weekly_planner_page",
+            week_start=(
+                plan_date - timedelta(days=plan_date.weekday())
+            ).isoformat()
+        ))
+
+    week_start = (
+        plan_date - timedelta(days=plan_date.weekday())
+    ).isoformat()
+
+    allergy = get_user_allergy()
+
+    if request.method == "POST":
+
+        meal_id = request.form.get("meal_id")
+
+        if not meal_id:
+            connection.close()
+            flash("Please select a meal.", "warning")
+            return redirect(url_for(
+                "weekly_planner.edit_plan",
+                plan_id=plan_id
+            ))
+
+        cursor.execute("""
+            SELECT id, ingredients
+            FROM meals
+            WHERE id = ?
+        """, (meal_id,))
+
+        selected_meal = cursor.fetchone()
+
+        if not selected_meal:
+            connection.close()
+            flash("Meal not found.", "danger")
+            return redirect(url_for(
+                "weekly_planner.edit_plan",
+                plan_id=plan_id
+            ))
+
+        if not is_meal_safe(selected_meal[1], allergy):
+            connection.close()
+            flash(
+                f"This meal is not suitable for your {allergy} allergy.",
+                "danger"
+            )
+            return redirect(url_for(
+                "weekly_planner.edit_plan",
+                plan_id=plan_id
+            ))
+
+        # Update only the meal, preserving the original date and status
+        cursor.execute("""
+            UPDATE weekly_plans
+            SET meal_id = ?
+            WHERE id = ?
+            AND user_id = ?
+            AND status IN ('Planned', 'Confirmed')
+            AND plan_date >= ?
+        """, (
+            selected_meal[0],
+            plan_id,
+            user_id,
+            date.today().isoformat()
+        ))
+
+        updated = cursor.rowcount
+
+        connection.commit()
+        connection.close()
+
+        if updated:
+            flash("Meal updated successfully!", "success")
+        else:
+            flash("This meal plan can no longer be edited.", "warning")
+
+        return redirect(url_for(
+            "weekly_planner.weekly_planner_page",
+            week_start=week_start
+        ))
+
+    # Show meals that are safe for this user's allergy settings
+    cursor.execute("""
+        SELECT *
+        FROM meals
+        ORDER BY id ASC
+    """)
+
+    all_meals = cursor.fetchall()
+
+    meals = [
+        meal for meal in all_meals
+        if is_meal_safe(meal[5], allergy)
+    ]
+
+    connection.close()
+
+    return render_template(
+        "edit_plan.html",
+        plan=plan,
+        meals=meals,
+        week_start=week_start
+    )
+
 
 # ==========================================
 # REMOVE PLAN
@@ -475,7 +631,6 @@ def remove_plan(plan_id):
             "weekly_planner.weekly_planner_page"
         )
     )
-
 
 # ==========================================
 # CONFIRM WEEKLY PLAN
@@ -553,10 +708,7 @@ def confirm_weekly_plan():
 # ORDER FULL WEEK
 # ==========================================
 
-@weekly_planner.route(
-    "/order-full-week",
-    methods=["POST", "GET"]
-)
+@weekly_planner.route("/order-full-week", methods=["POST"])
 def order_full_week():
 
     if "user_id" not in session:
@@ -634,6 +786,31 @@ def order_full_week():
                 week_start=week_start
             )
         )
+    
+
+    # Prevent ordering meals for past dates
+    today = date.today()
+
+    past_meals = [
+        plan for plan in plans
+        if date.fromisoformat(plan[1]) < today
+    ]
+
+    if past_meals:
+        connection.close()
+
+        flash(
+            "Cannot order meals for past dates. Please review your weekly plan.",
+            "warning"
+        )
+
+        return redirect(
+            url_for(
+                "weekly_planner.weekly_planner_page",
+                week_start=week_start
+            )
+        )
+
 
     # -----------------------------------
     # Create orders

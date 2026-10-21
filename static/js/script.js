@@ -29,17 +29,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+    
     // ==========================================
-    // Auto Hide Flash Messages
+    // Auto Hide Flash Messages Only
     // ==========================================
 
-    const alerts = document.querySelectorAll(".alert");
+    const flashAlerts = document.querySelectorAll(
+        "main > .container.mt-3 .alert.alert-dismissible"
+    );
 
-    alerts.forEach(function (alert) {
+    flashAlerts.forEach(function (alert) {
 
         setTimeout(function () {
 
-            const alertInstance = bootstrap.Alert.getOrCreateInstance(alert);
+            const alertInstance =
+                bootstrap.Alert.getOrCreateInstance(alert);
+
             alertInstance.close();
 
         }, 4000);

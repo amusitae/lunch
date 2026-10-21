@@ -141,20 +141,26 @@
 
                         <ul class="dropdown-menu dropdown-menu-end">
 
-
-                            <!-- Logout -->
-
+                            <!-- Manage Profile -->
                             <li>
-
-                                <a class="dropdown-item text-danger"
-                                   href="/logout">
-
-                                    🚪 Logout
-
+                                <a class="dropdown-item"
+                                href="{{ url_for('user.manage_profile') }}">
+                                    👤 Manage Profile
                                 </a>
-
                             </li>
 
+                            <!-- Divider -->
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <!-- Logout -->
+                            <li>
+                                <a class="dropdown-item text-danger"
+                                href="/logout">
+                                    🚪 Logout
+                                </a>
+                            </li>
 
                         </ul>
 
@@ -277,6 +283,15 @@
 
                                 </a>
 
+                            </li>
+
+                                <!-- Manage Profile -->
+
+                            <li>
+                                <a class="dropdown-item"
+                                href="{{ url_for('user.manage_profile') }}">
+                                    👤 Manage Profile
+                                </a>
                             </li>
 
 
